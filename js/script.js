@@ -42,7 +42,7 @@ window.addEventListener('DOMContentLoaded', () => {
 
     //Timer
 
-    const deadline = '2020-05-11';
+    const deadline = '2025-05-11';
 
     function getTimeRemaining(endtime) {
         let days, hours, minutes, seconds;
@@ -112,13 +112,16 @@ window.addEventListener('DOMContentLoaded', () => {
 
     function showModal(selector) {
         selector.forEach(item => {
-            item.addEventListener('click', () => {
-                modal.classList.add('show');
-                modal.classList.remove('hide');
-                document.body.style.overflow = 'hidden';
-            })
+            item.addEventListener('click', openModal)
         })
     };
+
+    function openModal() {
+        modal.classList.add('show');
+        modal.classList.remove('hide');
+        document.body.style.overflow = 'hidden';
+        clearInterval(modalTimerId);
+    }
 
     function closeModal() {
         modal.classList.add('hide');
@@ -145,5 +148,16 @@ window.addEventListener('DOMContentLoaded', () => {
 
     showModal(btn);
     closeModalBtn(close);
+
+    const modalTimerId = setTimeout(openModal, 5000);
+
+    function showModalByScroll() {
+        if (window.scrollY + document.documentElement.clientHeight >= document.documentElement.scrollHeight) {
+            openModal();
+            window.removeEventListener('scroll', showModalByScroll);
+        }
+    }
+
+    window.addEventListener('scroll', showModalByScroll);
 
 });
